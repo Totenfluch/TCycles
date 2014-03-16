@@ -10,13 +10,14 @@ import me.Totenfluch.main.Main;
 
 public class GetServerMessages{
 	public static String newestreply = null;
+	
 
 	public static void CheckServerMessages(String message){
 		if(message.startsWith("/setPos")){
 			String[] temp = message.split(" ");
 			if(Integer.valueOf(temp[1]) != Main.Player){
-				MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2])+50;
-				MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3])+50;
+				MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2]);
+				MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3]);
 			}
 		}
 		else if(message.startsWith("YouGotkickednr")){

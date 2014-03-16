@@ -57,6 +57,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			PlayerWalls[Main.Player][0][WallsToDraw[Main.Player]] = playerx[Main.Player];
 			PlayerWalls[Main.Player][1][WallsToDraw[Main.Player]] = playery[Main.Player];
 			WallsToDraw[Main.Player]++;
+			Client.processMessage("/updateWalls " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]) + " " + WallsToDraw[Main.Player]);
 			distancebetweenwalls =0;
 		}else{
 			distancebetweenwalls++;
