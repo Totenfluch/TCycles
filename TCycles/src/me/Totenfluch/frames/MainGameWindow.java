@@ -12,14 +12,15 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import me.Totenfluch.client.Client;
 import me.Totenfluch.main.Main;
 
 public class MainGameWindow extends JFrame implements MouseMotionListener, MouseListener, KeyListener {
 	private static final long serialVersionUID = 1L;
-	double playerx;
-	private double playery;
-	private double PlayerWalls[][] = new double[2][9999999];
-	private int WallsToDraw = 0;
+	public static double[] playerx = new double[4];
+	public static double[] playery = new double[4];
+	private double PlayerWalls[][][] = new double[4][2][9999999];
+	private int[] WallsToDraw = new int[4];
 	public static int lookingdirection = 0;
 	public static boolean blockx = false;
 	public static boolean blocky = false;
@@ -33,9 +34,15 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		playerx = 640;
-		playery = 360;
-
+		
+		for(int i = 0; i<4; i++){
+			playerx[i] = 0;
+			playery[i] = 0;
+		}
+		
+		playerx[Main.Player] = 640;
+		playery[Main.Player] = 360;
+		
 		requestFocus();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -47,25 +54,25 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 
 	public void update(){
 		if(distancebetweenwalls >= 5){
-			PlayerWalls[0][WallsToDraw] = playerx;
-			PlayerWalls[1][WallsToDraw] = playery;
-			WallsToDraw++;
+			PlayerWalls[Main.Player][0][WallsToDraw[Main.Player]] = playerx[Main.Player];
+			PlayerWalls[Main.Player][1][WallsToDraw[Main.Player]] = playery[Main.Player];
+			WallsToDraw[Main.Player]++;
 			distancebetweenwalls =0;
 		}else{
 			distancebetweenwalls++;
 		}
-		playerx = playerx + (playerspeed*Math.cos(Math.toRadians(lookingdirection - 90)));
-		playery = playery + (playerspeed*Math.sin(Math.toRadians(lookingdirection - 90)));
-		if(playerx > 1263 || playerx < 0 || playery < 0 || playery > 680){
+		playerx[Main.Player] = playerx[Main.Player] + (playerspeed*Math.cos(Math.toRadians(lookingdirection - 90)));
+		playery[Main.Player] = playery[Main.Player] + (playerspeed*Math.sin(Math.toRadians(lookingdirection - 90)));
+		if(playerx[Main.Player] > 1263 || playerx[Main.Player] < 0 || playery[Main.Player] < 0 || playery[Main.Player] > 680){
 			Forcedeath();
 		}
-		for(int i = 0; i<WallsToDraw-1 ; i++){
-			if(((PlayerWalls[0][i] - playerx < 6 && PlayerWalls[0][i] - playerx > -6) && (PlayerWalls[1][i] - playery < 6 && PlayerWalls[1][i] - playery > -6 ))){
+		for(int i = 0; i<WallsToDraw[Main.Player]-1 ; i++){
+			if(((PlayerWalls[Main.Player][0][i] - playerx[Main.Player] < 6 && PlayerWalls[Main.Player][0][i] - playerx[Main.Player] > -6) && (PlayerWalls[Main.Player][1][i] - playery[Main.Player] < 6 && PlayerWalls[Main.Player][1][i] - playery[Main.Player] > -6 ))){
 				Forcedeath();
 			}
 		}
 
-
+		Client.processMessage("/updatePos " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]));
 		repaint();
 	}
 
@@ -76,12 +83,12 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 	}
 
 	private void RestartGame(){
-		playerx = 640;
-		playery = 360;
+		playerx[Main.Player] = 640;
+		playery[Main.Player] = 360;
 		lookingdirection = 0;
 		distancebetweenwalls = 6;
 		playerspeed = 4.0;
-		WallsToDraw = 0;
+		WallsToDraw[Main.Player] = 0;
 		blocky=true;
 		Main.changeangelplus.stop();
 		blockx=true;
@@ -96,10 +103,16 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			g.setColor(Color.RED);
 			g.drawRect(0, 0, 1263, 680);
 			g.setColor(Color.ORANGE);
-			g.fillOval((int)playerx, (int)playery, 10, 10);
-			for(int i = 0; i<WallsToDraw ; i++){
+			//g.fillOval((int)playerx[Main.Player], (int)playery[Main.Player], 10, 10);
+			
+			for(int i = 0; i<4; i++){
+				g.setColor(Color.ORANGE);
+				g.fillOval((int)playerx[i], (int)playery[i], 10, 10);
+			}
+			
+			for(int i = 0; i<WallsToDraw[Main.Player] ; i++){
 				g.setColor(Color.RED);
-				g.fillOval((int)PlayerWalls[0][i], (int)PlayerWalls[1][i], 10, 10);
+				g.fillOval((int)PlayerWalls[Main.Player][0][i], (int)PlayerWalls[Main.Player][1][i], 10, 10);
 			}
 		}
 	}

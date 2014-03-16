@@ -4,13 +4,22 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import me.Totenfluch.frames.MainGameWindow;
+import me.Totenfluch.main.Main;
+
 
 public class GetServerMessages{
 	public static String newestreply = null;
 
 	public static void CheckServerMessages(String message){
-
-		if(message.startsWith("YouGotkickednr")){
+		if(message.startsWith("/setPos")){
+			String[] temp = message.split(" ");
+			if(Integer.valueOf(temp[1]) != Main.Player){
+				MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2])+50;
+				MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3])+50;
+			}
+		}
+		else if(message.startsWith("YouGotkickednr")){
 			JOptionPane.showMessageDialog(null, "Kicked by Server");
 			System.exit(0);
 		}
@@ -53,9 +62,9 @@ public class GetServerMessages{
 		else if(message.startsWith("broadcast Account") && message.contains("created")){
 
 		}
-		
+
 		else if(message.startsWith("broadcast")){
-		
+
 		}
 	}
 }

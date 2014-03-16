@@ -56,7 +56,7 @@ public class Client extends JFrame implements Runnable
 	public static void processMessage( String message ) {
 		if(IsConnectedToServer == true){
 			try {
-				dout.writeUTF( format );
+				dout.writeUTF( "Random-PC " + message );
 				tf.setText("");
 				waitingforreply = true;
 			} catch( Exception ie ){

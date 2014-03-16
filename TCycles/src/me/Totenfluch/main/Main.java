@@ -3,6 +3,7 @@ package me.Totenfluch.main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import me.Totenfluch.client.Client;
 import me.Totenfluch.frames.MainGameWindow;
 
 import javax.swing.Timer;
@@ -12,7 +13,16 @@ public class Main {
 	public static Timer gametimer = null;
 	public static Timer changeangelplus;
 	public static Timer changeangelminus;
+	public static int Player = 1;
 	public static void main(String[] args){
+		
+		
+		String host = "188.194.129.46";
+		int port = Integer.parseInt("9977");
+		@SuppressWarnings("unused")
+		final Client chatframe = new Client(host, port);
+		
+		
 		gameframe = new MainGameWindow();
 		initTimers();
 
@@ -55,7 +65,6 @@ public class Main {
 				}
 			}
 		});
-
 
 	}
 }
