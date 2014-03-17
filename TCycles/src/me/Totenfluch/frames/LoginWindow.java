@@ -1,5 +1,8 @@
 package me.Totenfluch.frames;
 
-public class LoginWindow {
+import javax.swing.JFrame;
 
+public class LoginWindow extends JFrame{
+	private static final long serialVersionUID = 1L;
+	
 }

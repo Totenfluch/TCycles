@@ -4,16 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import me.Totenfluch.client.Client;
+import me.Totenfluch.frames.LobbyWindow;
 import me.Totenfluch.frames.MainGameWindow;
 
 import javax.swing.Timer;
 
 public class Main {
 	public static MainGameWindow gameframe = null;
+	public static LobbyWindow lobbyframe = null;
 	public static Timer gametimer = null;
 	public static Timer changeangelplus;
 	public static Timer changeangelminus;
-	public static int Player = 1;
+	public static int Player = 3;
 	public static void main(String[] args){
 		
 		
@@ -22,10 +24,13 @@ public class Main {
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
 		
-		
+		lobbyframe = new LobbyWindow();
+
+	}
+	
+	public static void startgame(){
 		gameframe = new MainGameWindow();
 		initTimers();
-
 	}
 
 	private static void initTimers(){
