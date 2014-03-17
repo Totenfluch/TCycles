@@ -19,11 +19,12 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 	private static final long serialVersionUID = 1L;
 	public static double[] playerx = new double[4];
 	public static double[] playery = new double[4];
-	private double PlayerWalls[][][] = new double[4][2][9999999];
-	private int[] WallsToDraw = new int[4];
+	public static double PlayerWalls[][][] = new double[4][2][9999999];
+	public static int[] WallsToDraw = new int[4];
 	public static int lookingdirection = 0;
 	public static boolean blockx = false;
 	public static boolean blocky = false;
+	private Color colorrng[] = {Color.blue, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.LIGHT_GRAY, Color.darkGray}; 
 
 	private int distancebetweenwalls = 5;
 	private double playerspeed = 4.0;
@@ -34,15 +35,15 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
+
 		for(int i = 0; i<4; i++){
 			playerx[i] = 0;
 			playery[i] = 0;
 		}
-		
+
 		playerx[Main.Player] = 640;
 		playery[Main.Player] = 360;
-		
+
 		requestFocus();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -57,23 +58,27 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			PlayerWalls[Main.Player][0][WallsToDraw[Main.Player]] = playerx[Main.Player];
 			PlayerWalls[Main.Player][1][WallsToDraw[Main.Player]] = playery[Main.Player];
 			WallsToDraw[Main.Player]++;
-			Client.processMessage("/updateWalls " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]) + " " + WallsToDraw[Main.Player]);
-			distancebetweenwalls =0;
+			Client.processMessage("/updatePos " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]) + " "+ distancebetweenwalls);
+			distancebetweenwalls = 0;
 		}else{
+			Client.processMessage("/updatePos " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]) + " "+ distancebetweenwalls);
 			distancebetweenwalls++;
 		}
+
 		playerx[Main.Player] = playerx[Main.Player] + (playerspeed*Math.cos(Math.toRadians(lookingdirection - 90)));
 		playery[Main.Player] = playery[Main.Player] + (playerspeed*Math.sin(Math.toRadians(lookingdirection - 90)));
+
 		if(playerx[Main.Player] > 1263 || playerx[Main.Player] < 0 || playery[Main.Player] < 0 || playery[Main.Player] > 680){
 			Forcedeath();
 		}
-		for(int i = 0; i<WallsToDraw[Main.Player]-1 ; i++){
-			if(((PlayerWalls[Main.Player][0][i] - playerx[Main.Player] < 6 && PlayerWalls[Main.Player][0][i] - playerx[Main.Player] > -6) && (PlayerWalls[Main.Player][1][i] - playery[Main.Player] < 6 && PlayerWalls[Main.Player][1][i] - playery[Main.Player] > -6 ))){
-				Forcedeath();
+		for(int c = 0; c<4; c++){
+			for(int i = 0; i<WallsToDraw[c]-1 ; i++){
+				if(((PlayerWalls[c][0][i] - playerx[c] < 6 && PlayerWalls[c][0][i] - playerx[c] > -6) && (PlayerWalls[c][1][i] - playery[c] < 6 && PlayerWalls[c][1][i] - playery[c] > -6 ))){
+					Forcedeath();
+				}
 			}
 		}
 
-		Client.processMessage("/updatePos " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]));
 		repaint();
 	}
 
@@ -105,15 +110,16 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			g.drawRect(0, 0, 1263, 680);
 			g.setColor(Color.ORANGE);
 			//g.fillOval((int)playerx[Main.Player], (int)playery[Main.Player], 10, 10);
-			
+
 			for(int i = 0; i<4; i++){
-				g.setColor(Color.ORANGE);
+				g.setColor(colorrng[i]);
 				g.fillOval((int)playerx[i], (int)playery[i], 10, 10);
 			}
-			
-			for(int i = 0; i<WallsToDraw[Main.Player] ; i++){
-				g.setColor(Color.RED);
-				g.fillOval((int)PlayerWalls[Main.Player][0][i], (int)PlayerWalls[Main.Player][1][i], 10, 10);
+			for(int c = 0; c<4; c++){
+				for(int i = 0; i<WallsToDraw[c] ; i++){
+					g.setColor(Color.RED);
+					g.fillOval((int)PlayerWalls[c][0][i], (int)PlayerWalls[c][1][i], 10, 10);
+				}
 			}
 		}
 	}

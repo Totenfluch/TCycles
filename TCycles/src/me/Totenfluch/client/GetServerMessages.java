@@ -18,6 +18,12 @@ public class GetServerMessages{
 			if(Integer.valueOf(temp[1]) != Main.Player){
 				MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2]);
 				MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3]);
+				if(Integer.valueOf(temp[4]) >= 5){
+					MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]++;
+					
+					MainGameWindow.PlayerWalls[Integer.valueOf(temp[1])][0][MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]] = Integer.valueOf(temp[2]);
+					MainGameWindow.PlayerWalls[Integer.valueOf(temp[1])][1][MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]] = Integer.valueOf(temp[3]);
+				}
 			}
 		}
 		else if(message.startsWith("YouGotkickednr")){
