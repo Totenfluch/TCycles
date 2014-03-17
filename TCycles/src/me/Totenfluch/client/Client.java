@@ -8,6 +8,8 @@ import java.net.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import me.Totenfluch.main.Main;
+
 public class Client extends JFrame implements Runnable
 {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +58,7 @@ public class Client extends JFrame implements Runnable
 	public static void processMessage( String message ) {
 		if(IsConnectedToServer == true){
 			try {
-				dout.writeUTF( "Random-PC " + message );
+				dout.writeUTF( Main.ComputerName + " " + message );
 				tf.setText("");
 				waitingforreply = true;
 			} catch( Exception ie ){

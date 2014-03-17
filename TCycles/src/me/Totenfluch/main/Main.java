@@ -2,7 +2,10 @@ package me.Totenfluch.main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
+import me.Totenfluch.other.OtherStuff;
 import me.Totenfluch.client.Client;
 import me.Totenfluch.frames.LobbyWindow;
 import me.Totenfluch.frames.MainGameWindow;
@@ -15,22 +18,39 @@ public class Main {
 	public static Timer gametimer = null;
 	public static Timer changeangelplus;
 	public static Timer changeangelminus;
+	public static Timer updateLobbyWindow = null;
 	public static int Player = 3;
+	public static int AssignedPlayer = -1;
+	public static boolean SlotTaken = false;
+	public static InetAddress lComputerIP;
+	public static String ComputerMac;
+	public static String ComputerName;
+	public static String ComputerIP;
 	public static void main(String[] args){
-		
+
+		try {
+			lComputerIP = InetAddress.getLocalHost();
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		ComputerMac = OtherStuff.getMacAdress();
+		ComputerName = lComputerIP.getHostName();
+		ComputerIP = lComputerIP.getHostAddress();
 		
 		String host = "188.194.129.46";
 		int port = Integer.parseInt("9977");
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
+		initTimers();
 		
 		lobbyframe = new LobbyWindow();
+		updateLobbyWindow.start();
 
 	}
-	
+
 	public static void startgame(){
 		gameframe = new MainGameWindow();
-		initTimers();
+		gametimer.start();
 	}
 
 	private static void initTimers(){
@@ -41,7 +61,6 @@ public class Main {
 				gameframe.update();
 			}
 		});
-		gametimer.start();
 
 		changeangelplus = new Timer(10, new ActionListener()
 		{
@@ -67,6 +86,16 @@ public class Main {
 					}else{
 						MainGameWindow.lookingdirection = 359;
 					}
+				}
+			}
+		});
+
+		updateLobbyWindow = new Timer(50, new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if(lobbyframe.isVisible() == true){
+					lobbyframe.repaint();
 				}
 			}
 		});

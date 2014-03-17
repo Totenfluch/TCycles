@@ -6,11 +6,12 @@ import javax.swing.JOptionPane;
 
 import me.Totenfluch.frames.MainGameWindow;
 import me.Totenfluch.main.Main;
+import me.Totenfluch.frames.LobbyWindow;;
 
 
 public class GetServerMessages{
 	public static String newestreply = null;
-	
+
 
 	public static void CheckServerMessages(String message){
 		if(message.startsWith("/setPos")){
@@ -24,6 +25,95 @@ public class GetServerMessages{
 					MainGameWindow.PlayerWalls[Integer.valueOf(temp[1])][1][MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]] = Integer.valueOf(temp[3]);
 				}
 			}
+		}
+		else if(message.startsWith("/setReadyPlayers")){
+			if(message.contains("0")){
+				LobbyWindow.PlayerReady[0] = true;
+			}
+			if(message.contains("1")){
+				LobbyWindow.PlayerReady[1] = true;
+			}
+			if(message.contains("2")){
+				LobbyWindow.PlayerReady[2] = true;
+			}
+			if(message.contains("3")){
+				LobbyWindow.PlayerReady[3] = true;
+			}
+		}
+		else if(message.startsWith("/takeslot")){
+			String temp[] = message.split(" ");
+			Main.AssignedPlayer = Integer.parseInt(temp[1]);
+			if(Integer.parseInt(temp[1]) == 0){
+				LobbyWindow.User0.setText(temp[2]);
+			}else if(Integer.parseInt(temp[1]) == 1){
+				LobbyWindow.User1.setText(temp[2]);
+			}else if(Integer.parseInt(temp[1]) == 2){
+				LobbyWindow.User2.setText(temp[2]);
+			}else if(Integer.parseInt(temp[1]) == 3){
+				LobbyWindow.User3.setText(temp[2]);
+			}
+		}
+		else if(message.startsWith("/updateSlots")){
+			String temp[] = message.split(" ");
+			
+			if(temp[1] == "true"){
+				LobbyWindow.Join0.setEnabled(false);
+			}else{
+				LobbyWindow.Join0.setEnabled(true);
+			}
+			
+			if(temp[3] == "true"){
+				LobbyWindow.Join1.setEnabled(false);
+			}else{
+				LobbyWindow.Join1.setEnabled(true);
+			}
+			
+			if(temp[4] == "true"){
+				LobbyWindow.Join2.setEnabled(false);
+			}else{
+				LobbyWindow.Join2.setEnabled(true);
+			}
+			
+			if(temp[7] == "true"){
+				LobbyWindow.Join3.setEnabled(false);
+			}else{
+				LobbyWindow.Join3.setEnabled(true);
+			}
+			
+			if(temp[2] != "null" && temp[2] != null){
+				LobbyWindow.User0.setText(temp[2]);
+			}else{
+				LobbyWindow.User0.setText("");
+			}
+			
+			if(temp[4] != "null" && temp[4] != null){
+				LobbyWindow.User1.setText(temp[4]);
+			}else{
+				LobbyWindow.User1.setText("");
+			}
+			
+			if(temp[6] != "null" && temp[6] != null){
+				LobbyWindow.User2.setText(temp[6]);
+			}else{
+				LobbyWindow.User2.setText("");
+			}
+			
+			if(temp[8] != "null" && temp[8] != null){
+				LobbyWindow.User3.setText(temp[8]);
+			}else{
+				LobbyWindow.User3.setText("");
+			}
+			/*
+			Server.sendToAll("/updateSlots " + occupiedslots[0] + " "
+			+ occupiedslotsnames[0] + " " + occupiedslots[1] + " "
+			+ occupiedslotsnames[1] + " " + occupiedslots[2] + " "
+			+ occupiedslotsnames[2] + " " + occupiedslots[3] + " " 
+			+ occupiedslotsnames[3]);
+			 */
+
+
+			//updateSlots true Christian-PC false null false null false null
+			// 0			1		2		3      4    5     6      7    8
 		}
 		else if(message.startsWith("YouGotkickednr")){
 			JOptionPane.showMessageDialog(null, "Kicked by Server");
