@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 
 import me.Totenfluch.other.OtherStuff;
 import me.Totenfluch.client.Client;
+import me.Totenfluch.frames.LoadingWindow;
 import me.Totenfluch.frames.LobbyWindow;
 import me.Totenfluch.frames.MainGameWindow;
 
@@ -26,6 +27,8 @@ public class Main {
 	public static String ComputerMac;
 	public static String ComputerName;
 	public static String ComputerIP;
+	public static boolean isStarted = false;
+	public static String LobbyServerName = "TCycle-Server-1-Atares";
 	public static void main(String[] args){
 
 		try {
@@ -36,21 +39,29 @@ public class Main {
 		ComputerMac = OtherStuff.getMacAdress();
 		ComputerName = lComputerIP.getHostName();
 		ComputerIP = lComputerIP.getHostAddress();
-		
-		String host = "188.194.129.46";
+		lobbyframe = new LobbyWindow();
+
+		LoadingWindow lframe = new LoadingWindow();
+		String host = "188.194.11.106";
 		int port = Integer.parseInt("9977");
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
 		initTimers();
-		
+		lframe.setVisible(false);
+
 		lobbyframe = new LobbyWindow();
+		lobbyframe.setVisible(true);
 		updateLobbyWindow.start();
 
 	}
 
 	public static void startgame(){
-		gameframe = new MainGameWindow();
-		gametimer.start();
+		if(isStarted == false){
+			gameframe = new MainGameWindow();
+			gametimer.start();
+			lobbyframe.setVisible(false);
+			isStarted = true;
+		}
 	}
 
 	private static void initTimers(){

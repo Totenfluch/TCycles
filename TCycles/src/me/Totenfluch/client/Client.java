@@ -50,6 +50,7 @@ public class Client extends JFrame implements Runnable
 			new Thread( this ).start();
 		}catch( IOException ie ){ 		
 			JOptionPane.showMessageDialog(null, "Couldn't connect to the Master Server.");
+			System.exit(0);
 			disconnected = true;
 		}
 	}

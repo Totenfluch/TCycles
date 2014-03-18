@@ -112,7 +112,7 @@ public class LobbyWindow extends JFrame{
 		Join3.addActionListener(handler);
 
 
-		setVisible(true);
+		setVisible(false);
 	}
 
 	class DrawPane extends JPanel{

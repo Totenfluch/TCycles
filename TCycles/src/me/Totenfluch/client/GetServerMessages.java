@@ -26,6 +26,10 @@ public class GetServerMessages{
 				}
 			}
 		}
+		if(message.startsWith("/forcestart")){
+			Main.Player = Main.AssignedPlayer;
+			Main.startgame();
+		}
 		else if(message.startsWith("/setReadyPlayers")){
 			if(message.contains("0")){
 				LobbyWindow.PlayerReady[0] = true;
@@ -54,62 +58,59 @@ public class GetServerMessages{
 			}
 		}
 		else if(message.startsWith("/updateSlots")){
-			String temp[] = message.split(" ");
-			
-			if(temp[1] == "true"){
-				LobbyWindow.Join0.setEnabled(false);
-			}else{
-				LobbyWindow.Join0.setEnabled(true);
+			try{
+				String temp[] = message.split(" ");
+
+				if(temp[1].equals("true")){
+					LobbyWindow.Join0.setEnabled(false);
+				}else{
+					LobbyWindow.Join0.setEnabled(true);
+				}
+
+				if(temp[3].equals("true")){
+					LobbyWindow.Join1.setEnabled(false);
+				}else{
+					LobbyWindow.Join1.setEnabled(true);
+				}
+
+				if(temp[5].equals("true")){
+					LobbyWindow.Join2.setEnabled(false);
+				}else{
+					LobbyWindow.Join2.setEnabled(true);
+				}
+
+				if(temp[7].equals("true")){
+					LobbyWindow.Join3.setEnabled(false);
+				}else{
+					LobbyWindow.Join3.setEnabled(true);
+				}
+
+				if(!temp[2].equals("null")){
+					LobbyWindow.User0.setText(temp[2]);
+				}else{
+					LobbyWindow.User0.setText("- Empty Slot -");
+				}
+
+				if(!temp[4].equals("null")){
+					LobbyWindow.User1.setText(temp[4]);
+				}else{
+					LobbyWindow.User1.setText("- Empty Slot -");
+				}
+
+				if(!temp[6].equals("null")){
+					LobbyWindow.User2.setText(temp[6]);
+				}else{
+					LobbyWindow.User2.setText("- Empty Slot -");
+				}
+
+				if(!temp[8].equals("null")){
+					LobbyWindow.User3.setText(temp[8]);
+				}else{
+					LobbyWindow.User3.setText("- Empty Slot -");
+				}
+			}catch(Exception e){
+				e.printStackTrace();
 			}
-			
-			if(temp[3] == "true"){
-				LobbyWindow.Join1.setEnabled(false);
-			}else{
-				LobbyWindow.Join1.setEnabled(true);
-			}
-			
-			if(temp[4] == "true"){
-				LobbyWindow.Join2.setEnabled(false);
-			}else{
-				LobbyWindow.Join2.setEnabled(true);
-			}
-			
-			if(temp[7] == "true"){
-				LobbyWindow.Join3.setEnabled(false);
-			}else{
-				LobbyWindow.Join3.setEnabled(true);
-			}
-			
-			if(temp[2] != "null" && temp[2] != null){
-				LobbyWindow.User0.setText(temp[2]);
-			}else{
-				LobbyWindow.User0.setText("");
-			}
-			
-			if(temp[4] != "null" && temp[4] != null){
-				LobbyWindow.User1.setText(temp[4]);
-			}else{
-				LobbyWindow.User1.setText("");
-			}
-			
-			if(temp[6] != "null" && temp[6] != null){
-				LobbyWindow.User2.setText(temp[6]);
-			}else{
-				LobbyWindow.User2.setText("");
-			}
-			
-			if(temp[8] != "null" && temp[8] != null){
-				LobbyWindow.User3.setText(temp[8]);
-			}else{
-				LobbyWindow.User3.setText("");
-			}
-			/*
-			Server.sendToAll("/updateSlots " + occupiedslots[0] + " "
-			+ occupiedslotsnames[0] + " " + occupiedslots[1] + " "
-			+ occupiedslotsnames[1] + " " + occupiedslots[2] + " "
-			+ occupiedslotsnames[2] + " " + occupiedslots[3] + " " 
-			+ occupiedslotsnames[3]);
-			 */
 
 
 			//updateSlots true Christian-PC false null false null false null

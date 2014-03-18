@@ -41,17 +41,25 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			playerx[i] = 0;
 			playery[i] = 0;
 		}
-
+		
 		playerx[Main.Player] = 640+(Main.Player*20);
 		playery[Main.Player] = 360;
+		
+		if(Main.Player == 0){
+			lookingdirection = 0;
+		}else if(Main.Player == 1){
+			lookingdirection = 180;
+		}else if(Main.Player == 2){
+			lookingdirection = 0;
+		}else if(Main.Player == 3){
+			lookingdirection = 180;
+		}
 
 		requestFocus();
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
-
-
 
 
 	public void update(){
