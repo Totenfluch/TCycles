@@ -26,9 +26,23 @@ public class GetServerMessages{
 				}
 			}
 		}
-		if(message.startsWith("/forcestart")){
-			Main.Player = Main.AssignedPlayer;
-			Main.startgame();
+		
+		if(message.startsWith("/forceRestart")){
+			Main.restartgame();
+			Main.gameframe.isDeath = true;
+			Main.isRespawning = true;
+		}
+		else if(message.startsWith("/forceEndGame")){
+			JOptionPane.showMessageDialog(null, "The Game is over! Thanks for Playing!");
+			System.exit(0);
+		}
+		else if(message.startsWith("/forcestart")){
+			if(Main.AssignedPlayer != -1){
+				Main.Player = Main.AssignedPlayer;
+				Main.startgame();
+			}else{
+				JOptionPane.showMessageDialog(null, "The game has started but you didn't pick a slot.");
+			}
 		}
 		else if(message.startsWith("/setReadyPlayers")){
 			if(message.contains("0")){

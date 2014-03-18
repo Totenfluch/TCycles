@@ -1,15 +1,17 @@
 package me.Totenfluch.frames;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import me.Totenfluch.client.Client;
@@ -26,6 +28,10 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 	public static boolean blocky = false;
 	private Color colorplayer[] = {Color.blue, Color.MAGENTA, Color.YELLOW, Color.darkGray}; 
 	private Color colortail[] = {Color.CYAN, Color.PINK, Color.ORANGE, Color.lightGray};
+	public boolean isDeath = false;
+	public Font ftDefault = new Font("Impact", Font.BOLD, 25);
+	public int JWidth = 1280;
+	public int JHight = 720;
 
 	private int distancebetweenwalls = 5;
 	private double playerspeed = 4.0;
@@ -35,7 +41,15 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		setContentPane(new DrawPane());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setVisible(true);
+		setResizable(false);
+
+		requestFocus();
+		addKeyListener(this);
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
+	
+	public void initGame(){
 
 		for(int i = 0; i<4; i++){
 			playerx[i] = 0;
@@ -54,11 +68,6 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		}else if(Main.Player == 3){
 			lookingdirection = 180;
 		}
-
-		requestFocus();
-		addKeyListener(this);
-		addMouseListener(this);
-		addMouseMotionListener(this);
 	}
 
 
@@ -90,16 +99,32 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 
 		repaint();
 	}
-
-	private void Forcedeath(){
-		JOptionPane.showMessageDialog(null, "You faggot died again lolololo nub");
-
-		RestartGame();
+	
+	public void afterdeathrepaint(){
+		repaint();
 	}
 
-	private void RestartGame(){
-		playerx[Main.Player] = 640+(Main.Player*3);
+	private void Forcedeath(){
+		Client.processMessage("/confirmdeath " + Main.Player);
+		isDeath = true;
+	}
+
+	public void RestartGame(){
+		playerx[Main.Player] = 640+(Main.Player*20);
 		playery[Main.Player] = 360;
+		if(Main.Player == 0){
+			lookingdirection = 0;
+		}else if(Main.Player == 1){
+			lookingdirection = 180;
+		}else if(Main.Player == 2){
+			lookingdirection = 0;
+		}else if(Main.Player == 3){
+			lookingdirection = 180;
+		}
+		WallsToDraw[0] = 0;
+		WallsToDraw[1] = 0;
+		WallsToDraw[2] = 0;
+		WallsToDraw[3] = 0;
 		lookingdirection = 0;
 		distancebetweenwalls = 6;
 		playerspeed = 4.0;
@@ -108,6 +133,19 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		Main.changeangelplus.stop();
 		blockx=true;
 		Main.changeangelminus.stop();
+		Main.RespawnTimer.start();
+	}
+	
+	public void revive(){
+		isDeath = false;
+	}
+	
+	private void DrawCenteredString(Graphics g, Color color, String s, int xPos, int yPos){
+		FontMetrics fm = getFontMetrics(ftDefault);
+		Rectangle2D textsize = fm.getStringBounds(s, g);
+		xPos = (int) ((JWidth - textsize.getWidth()) / 2);
+		g.setColor(color);
+		g.drawString(s, xPos, yPos);
 	}
 
 	class DrawPane extends JPanel{
@@ -118,8 +156,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			g.setColor(Color.RED);
 			g.drawRect(0, 0, 1263, 680);
 			g.setColor(Color.ORANGE);
-			//g.fillOval((int)playerx[Main.Player], (int)playery[Main.Player], 10, 10);
-
+			
 			for(int i = 0; i<4; i++){
 				g.setColor(colorplayer[i]);
 				g.fillOval((int)playerx[i], (int)playery[i], 10, 10);
@@ -129,6 +166,14 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 					g.setColor(colortail[c]);
 					g.fillOval((int)PlayerWalls[c][0][i], (int)PlayerWalls[c][1][i], 10, 10);
 				}
+			}
+			if(isDeath == true){
+				g.setColor(Color.RED);
+				g.setFont(new Font("Impact", Font.BOLD, 25));
+				g.drawString("You have died. Wait for the other Players to finish their Round.", 300, 300);
+			}
+			if(isDeath == true && Main.isRespawning == true){
+				DrawCenteredString(g, Color.ORANGE, Main.TimeToRestart+". . .", JWidth/2, 250);
 			}
 		}
 	}

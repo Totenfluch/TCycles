@@ -20,6 +20,7 @@ public class Main {
 	public static Timer changeangelplus;
 	public static Timer changeangelminus;
 	public static Timer updateLobbyWindow = null;
+	public static Timer RespawnTimer = null;
 	public static int Player = 3;
 	public static int AssignedPlayer = -1;
 	public static boolean SlotTaken = false;
@@ -28,6 +29,8 @@ public class Main {
 	public static String ComputerName;
 	public static String ComputerIP;
 	public static boolean isStarted = false;
+	public static int TimeToRestart = 3;
+	public static boolean isRespawning = false;
 	public static String LobbyServerName = "TCycle-Server-1-Atares";
 	public static void main(String[] args){
 
@@ -40,6 +43,7 @@ public class Main {
 		ComputerName = lComputerIP.getHostName();
 		ComputerIP = lComputerIP.getHostAddress();
 		lobbyframe = new LobbyWindow();
+		gameframe = new MainGameWindow();
 
 		LoadingWindow lframe = new LoadingWindow();
 		String host = "188.194.11.106";
@@ -57,11 +61,20 @@ public class Main {
 
 	public static void startgame(){
 		if(isStarted == false){
-			gameframe = new MainGameWindow();
-			gametimer.start();
-			lobbyframe.setVisible(false);
-			isStarted = true;
+			try{
+				gameframe.initGame();
+				gameframe.setVisible(true);
+				gametimer.start();
+				lobbyframe.setVisible(false);
+				isStarted = true;
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
+	}
+
+	public static void restartgame(){
+		gameframe.RestartGame();
 	}
 
 	private static void initTimers(){
@@ -69,7 +82,11 @@ public class Main {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				gameframe.update();
+				if(gameframe.isDeath == false){
+					gameframe.update();
+				}else{
+					gameframe.afterdeathrepaint();
+				}
 			}
 		});
 
@@ -97,6 +114,20 @@ public class Main {
 					}else{
 						MainGameWindow.lookingdirection = 359;
 					}
+				}
+			}
+		});
+		
+		RespawnTimer = new Timer(1000, new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				TimeToRestart--;
+				if(TimeToRestart == 0){
+					TimeToRestart = 3;
+					RespawnTimer.stop();
+					gameframe.revive();
+					isRespawning = false;
 				}
 			}
 		});
