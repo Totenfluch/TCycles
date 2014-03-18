@@ -26,6 +26,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 	public static int lookingdirection = 0;
 	public static boolean blockx = false;
 	public static boolean blocky = false;
+	public int Round = 0;
 	private Color colorplayer[] = {Color.blue, Color.MAGENTA, Color.YELLOW, Color.darkGray}; 
 	private Color colortail[] = {Color.CYAN, Color.PINK, Color.ORANGE, Color.lightGray};
 	public boolean isDeath = false;
@@ -86,7 +87,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		playerx[Main.Player] = playerx[Main.Player] + (playerspeed*Math.cos(Math.toRadians(lookingdirection - 90)));
 		playery[Main.Player] = playery[Main.Player] + (playerspeed*Math.sin(Math.toRadians(lookingdirection - 90)));
 
-		if(playerx[Main.Player] > 1263 || playerx[Main.Player] < 0 || playery[Main.Player] < 0 || playery[Main.Player] > 680){
+		if(playerx[Main.Player] > 1263 || playerx[Main.Player] < 0 || playery[Main.Player] < 0 || playery[Main.Player] > 665){
 			Forcedeath();
 		}
 		for(int c = 0; c<4; c++){
@@ -174,6 +175,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			}
 			if(isDeath == true && Main.isRespawning == true){
 				DrawCenteredString(g, Color.ORANGE, Main.TimeToRestart+". . .", JWidth/2, 250);
+				DrawCenteredString(g, Color.ORANGE, "Round: " + Round + "/10", JWidth/2, 350);
 			}
 		}
 	}

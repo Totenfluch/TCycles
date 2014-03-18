@@ -31,6 +31,8 @@ public class GetServerMessages{
 			Main.restartgame();
 			Main.gameframe.isDeath = true;
 			Main.isRespawning = true;
+			String[] temp = message.split(" ");
+			Main.gameframe.Round = Integer.parseInt(temp[1]);
 		}
 		else if(message.startsWith("/forceEndGame")){
 			JOptionPane.showMessageDialog(null, "The Game is over! Thanks for Playing!");
