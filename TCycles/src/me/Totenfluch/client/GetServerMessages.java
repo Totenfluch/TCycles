@@ -17,22 +17,28 @@ public class GetServerMessages{
 		if(message.startsWith("/setPos")){
 			String[] temp = message.split(" ");
 			if(Integer.valueOf(temp[1]) != Main.Player){
-				MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2]);
-				MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3]);
 				if(Integer.valueOf(temp[4]) >= 5){
 					MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]++;
 					MainGameWindow.PlayerWalls[Integer.valueOf(temp[1])][0][MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]] = Integer.valueOf(temp[2]);
 					MainGameWindow.PlayerWalls[Integer.valueOf(temp[1])][1][MainGameWindow.WallsToDraw[Integer.valueOf(temp[1])]] = Integer.valueOf(temp[3]);
+					MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2]);
+					MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3]);
+				}else{
+					MainGameWindow.playerx[Integer.valueOf(temp[1])] = Integer.valueOf(temp[2]);
+					MainGameWindow.playery[Integer.valueOf(temp[1])] = Integer.valueOf(temp[3]);
 				}
 			}
 		}
 		
 		if(message.startsWith("/forceRestart")){
+			if(Main.gameframe.isDeath == false){
+				Main.gameframe.won = true;
+			}
 			Main.restartgame();
 			Main.gameframe.isDeath = true;
 			Main.isRespawning = true;
 			String[] temp = message.split(" ");
-			Main.gameframe.Round = Integer.parseInt(temp[1]);
+			Main.gameframe.Round = Integer.parseInt(temp[1])+1;
 		}
 		else if(message.startsWith("/forceEndGame")){
 			JOptionPane.showMessageDialog(null, "The Game is over! Thanks for Playing!");
@@ -150,18 +156,18 @@ public class GetServerMessages{
 			System.exit(0);
 		}
 
-		else if(message.startsWith("You are connected to GameZ-Server-1")){
-			Client.IsConnectedToServer = true;
+		else if(message.startsWith("You are connected to TCycle-Server-1")){
+			Main.chatframe.IsConnectedToServer = true;
 		}
 
 		else if(message.startsWith("ServerIsShuttingDown")){
 			try {
-				Client.socket.close();
+				Main.chatframe.socket.close();
 			} catch (IOException e){
 				e.printStackTrace();
 			}
-			Client.disconnected = true;
-			Client.IsConnectedToServer = false;
+			Main.chatframe.disconnected = true;
+			Main.chatframe.IsConnectedToServer = false;
 		}
 
 		else if(message.startsWith("forcelogin")){
@@ -177,7 +183,7 @@ public class GetServerMessages{
 		}
 
 		else if(message.startsWith("broadcast")){
-
+			JOptionPane.showMessageDialog(null, message);
 		}
 	}
 }

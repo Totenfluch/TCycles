@@ -2,6 +2,7 @@ package me.Totenfluch.main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -10,17 +11,21 @@ import me.Totenfluch.client.Client;
 import me.Totenfluch.frames.LoadingWindow;
 import me.Totenfluch.frames.LobbyWindow;
 import me.Totenfluch.frames.MainGameWindow;
+import me.Totenfluch.frames.MainMenuWindow;
 
 import javax.swing.Timer;
 
 public class Main {
 	public static MainGameWindow gameframe = null;
 	public static LobbyWindow lobbyframe = null;
+	public static MainMenuWindow MainMenuframe = null;
+	public static Client chatframe = null;
 	public static Timer gametimer = null;
 	public static Timer changeangelplus;
 	public static Timer changeangelminus;
 	public static Timer updateLobbyWindow = null;
 	public static Timer RespawnTimer = null;
+	public static Timer updateMainMenuWindow = null;
 	public static int Player = 3;
 	public static int AssignedPlayer = -1;
 	public static boolean SlotTaken = false;
@@ -44,21 +49,65 @@ public class Main {
 		ComputerIP = lComputerIP.getHostAddress();
 		lobbyframe = new LobbyWindow();
 		gameframe = new MainGameWindow();
-
-		LoadingWindow lframe = new LoadingWindow();
-		String host = "188.194.11.106";
-		int port = Integer.parseInt("9977");
-		@SuppressWarnings("unused")
-		final Client chatframe = new Client(host, port);
+		MainMenuframe = new MainMenuWindow();
 		initTimers();
-		lframe.setVisible(false);
 
 		lobbyframe = new LobbyWindow();
-		lobbyframe.setVisible(true);
-		updateLobbyWindow.start();
 
 	}
+	
+	public static void disconnectfromserver(){
+		/*try {
+			chatframe.din.close();
+			chatframe.dout.close();
+			chatframe.socket.close();	
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		chatframe.socket = null;
+		chatframe.din = null;
+		chatframe.dout = null;
+		chatframe.dispose();*/
+		chatframe = null;
+		openMainMenuWindow();
+	}
+	
+	public static void closeMainMenuWindow(){
+		MainMenuframe.setVisible(false);
+		updateMainMenuWindow.stop();
+	}
+	
+	public static void openMainMenuWindow(){
+		MainMenuframe.setVisible(true);
+		updateMainMenuWindow.start();
+	}
+	
+	public static void ConnectToLobbyServer(String Name){
+		String ip = null;
+		if(Name.equals("Atares")){
+			ip = "188.194.11.106";
+		}else{
+			return;
+		}
+		
+		LoadingWindow lframe = new LoadingWindow();
+		String host = ip;
+		int port = Integer.parseInt("9977");
+		chatframe = new Client(host, port);
+		lframe.setVisible(false);
+		openLobbyWindow();
+	}
 
+	public static void openLobbyWindow(){
+		lobbyframe.setVisible(true);
+		updateLobbyWindow.start();
+	}
+	
+	public static void closeLobbyWindow(){
+		lobbyframe.setVisible(false);
+		updateLobbyWindow.stop();
+	}
+	
 	public static void startgame(){
 		if(isStarted == false){
 			try{
@@ -115,6 +164,14 @@ public class Main {
 						MainGameWindow.lookingdirection = 359;
 					}
 				}
+			}
+		});
+		
+		updateMainMenuWindow = new Timer(50, new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				MainMenuframe.repaint();
 			}
 		});
 		

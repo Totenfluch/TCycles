@@ -33,6 +33,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 	public Font ftDefault = new Font("Impact", Font.BOLD, 25);
 	public int JWidth = 1280;
 	public int JHight = 720;
+	public boolean won = false;
 
 	private int distancebetweenwalls = 5;
 	private double playerspeed = 4.0;
@@ -49,17 +50,17 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
-	
+
 	public void initGame(){
 
 		for(int i = 0; i<4; i++){
 			playerx[i] = 0;
 			playery[i] = 0;
 		}
-		
+
 		playerx[Main.Player] = 640+(Main.Player*20);
 		playery[Main.Player] = 360;
-		
+
 		if(Main.Player == 0){
 			lookingdirection = 0;
 		}else if(Main.Player == 1){
@@ -68,6 +69,10 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			lookingdirection = 0;
 		}else if(Main.Player == 3){
 			lookingdirection = 180;
+		}
+
+		for(int i=0; i<4; i++){
+			WallsToDraw[i] = 0;
 		}
 	}
 
@@ -88,25 +93,30 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		playery[Main.Player] = playery[Main.Player] + (playerspeed*Math.sin(Math.toRadians(lookingdirection - 90)));
 
 		if(playerx[Main.Player] > 1263 || playerx[Main.Player] < 0 || playery[Main.Player] < 0 || playery[Main.Player] > 665){
-			Forcedeath();
+			Forcedeath(2);
 		}
 		for(int c = 0; c<4; c++){
+			if(c != Main.Player){
+				if(((playerx[Main.Player] - playerx[c] < 6 && playerx[Main.Player] - playerx[c] > -6) && (playery[Main.Player] - playery[c] < 6 && playery[Main.Player] - playery[c] > -6 ))){
+					Forcedeath(1);
+				}
+			}
 			for(int i = 0; i<WallsToDraw[c]-1 ; i++){
 				if(((PlayerWalls[c][0][i] - playerx[Main.Player] < 6 && PlayerWalls[c][0][i] - playerx[Main.Player] > -6) && (PlayerWalls[c][1][i] - playery[Main.Player] < 6 && PlayerWalls[c][1][i] - playery[Main.Player] > -6 ))){
-					Forcedeath();
+					Forcedeath(0);
 				}
 			}
 		}
 
 		repaint();
 	}
-	
+
 	public void afterdeathrepaint(){
 		repaint();
 	}
 
-	private void Forcedeath(){
-		Client.processMessage("/confirmdeath " + Main.Player);
+	private void Forcedeath(int reason){
+		Client.processMessage("/confirmdeath " + Main.Player + " " + reason);
 		isDeath = true;
 	}
 
@@ -135,12 +145,14 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 		blockx=true;
 		Main.changeangelminus.stop();
 		Main.RespawnTimer.start();
+		Client.processMessage("/updatePos " + Main.Player + " " + (int)Math.floor(playerx[Main.Player]) + " " + (int)Math.floor(playery[Main.Player]) + " "+ 1);
 	}
-	
+
 	public void revive(){
+		won = false;
 		isDeath = false;
 	}
-	
+
 	private void DrawCenteredString(Graphics g, Color color, String s, int xPos, int yPos){
 		FontMetrics fm = getFontMetrics(ftDefault);
 		Rectangle2D textsize = fm.getStringBounds(s, g);
@@ -157,7 +169,7 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			g.setColor(Color.RED);
 			g.drawRect(0, 0, 1263, 680);
 			g.setColor(Color.ORANGE);
-			
+
 			for(int i = 0; i<4; i++){
 				g.setColor(colorplayer[i]);
 				g.fillOval((int)playerx[i], (int)playery[i], 10, 10);
@@ -171,7 +183,12 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 			if(isDeath == true){
 				g.setColor(Color.RED);
 				g.setFont(new Font("Impact", Font.BOLD, 25));
-				g.drawString("You have died. Wait for the other Players to finish their Round.", 300, 300);
+				if(won == false){
+					g.drawString("You have died. Wait for the other Players to finish their Round.", 300, 300);
+				}else{
+					g.setColor(Color.GREEN);
+					g.drawString("You Won! Congratulations!!!! :)) Round restart incoming :/o", 300, 300);
+				}
 			}
 			if(isDeath == true && Main.isRespawning == true){
 				DrawCenteredString(g, Color.ORANGE, Main.TimeToRestart+". . .", JWidth/2, 250);
@@ -183,14 +200,16 @@ public class MainGameWindow extends JFrame implements MouseMotionListener, Mouse
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_LEFT){
-			blockx=false;
-			Main.changeangelminus.start();
-		}
+		if(isDeath == false){
+			if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				blockx=false;
+				Main.changeangelminus.start();
+			}
 
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT){	
-			blocky=false;
-			Main.changeangelplus.start();
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT){	
+				blocky=false;
+				Main.changeangelplus.start();
+			}
 		}
 	}
 

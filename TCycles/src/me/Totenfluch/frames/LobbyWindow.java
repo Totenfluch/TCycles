@@ -21,7 +21,7 @@ public class LobbyWindow extends JFrame{
 
 	public JTextField ID0, ID1, ID2, ID3;
 	public static JTextField User0, User1, User2, User3;
-	public static JButton Join0, Join1, Join2, Join3;
+	public static JButton Join0, Join1, Join2, Join3, back;
 
 	public static boolean[] PlayerReady = new boolean[4];
 
@@ -96,7 +96,10 @@ public class LobbyWindow extends JFrame{
 		Join3 = new JButton("Join");
 		Join3.setBounds(330, 190, 60, 25);
 		add(Join3);
-
+		
+		back = new JButton("Disconnect");
+		back.setBounds(25, 400, 100, 50);
+		add(back);
 
 
 
@@ -110,6 +113,7 @@ public class LobbyWindow extends JFrame{
 		Join1.addActionListener(handler);
 		Join2.addActionListener(handler);
 		Join3.addActionListener(handler);
+		back.addActionListener(handler);
 
 
 		setVisible(false);
@@ -157,11 +161,14 @@ public class LobbyWindow extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			/*if(e.getSource() == Ready){
-				Main.Player = Integer.valueOf(User0.getText().toString());
-				Main.startgame();
-			}*/
-
+			if(e.getSource() == back){
+				setVisible(false);
+				Main.disconnectfromserver();
+				PlayerReady[0] = false;
+				PlayerReady[1] = false;
+				PlayerReady[2] = false;
+				PlayerReady[3] = false;
+			}
 			if(e.getSource() == Ready){
 				Client.processMessage("/readyup " + Main.AssignedPlayer);
 			}

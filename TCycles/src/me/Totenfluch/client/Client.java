@@ -13,18 +13,18 @@ import me.Totenfluch.main.Main;
 public class Client extends JFrame implements Runnable
 {
 	private static final long serialVersionUID = 1L;
-	public static boolean IsConnectedToServer = false;
-	private static TextField tf = new TextField("Input", 80);
-	private TextArea ta = new TextArea("Server Cmd's will appear here\n\n", 30, 120);
-	private static TextField ComputerName = new TextField("Client", 20);
+	public boolean IsConnectedToServer = false;
+	public TextField tf = new TextField("Input", 80);
+	public TextArea ta = new TextArea("Server Cmd's will appear here\n\n", 30, 120);
+	public TextField ComputerName = new TextField("Client", 20);
 	public static String LatestServerReply = "";
-	public static boolean waitingforreply = false;
-	public static boolean disconnected = false;
+	public boolean waitingforreply = false;
+	public boolean disconnected = false;
 
-	static String format;
-	public static Socket socket;
-	private static DataOutputStream dout;
-	private DataInputStream din;
+	public String format;
+	public Socket socket;
+	public DataOutputStream dout;
+	public DataInputStream din;
 
 	public Client( String host, int port ) {
 		setSize(900, 600);
@@ -57,11 +57,11 @@ public class Client extends JFrame implements Runnable
 
 
 	public static void processMessage( String message ) {
-		if(IsConnectedToServer == true){
+		if(Main.chatframe.IsConnectedToServer == true){
 			try {
-				dout.writeUTF( Main.ComputerName + " " + message );
-				tf.setText("");
-				waitingforreply = true;
+				Main.chatframe.dout.writeUTF( Main.ComputerName + " " + message );
+				Main.chatframe.tf.setText("");
+				Main.chatframe.waitingforreply = true;
 			} catch( Exception ie ){
 				ie.printStackTrace();
 				System.out.println( ie ); 
@@ -81,7 +81,7 @@ public class Client extends JFrame implements Runnable
 						ta.append(message+"\n");
 						waitingforreply = false;
 					}catch(Exception e){
-						System.out.println("Server read message exception.");
+						e.printStackTrace();
 						IsConnectedToServer = false;
 						disconnected = true;
 					}
