@@ -20,6 +20,8 @@ public class Client extends JFrame implements Runnable
 	public static String LatestServerReply = "";
 	public boolean waitingforreply = false;
 	public boolean disconnected = false;
+	public boolean running = true;
+	public Thread thread = null;
 
 	public String format;
 	public Socket socket;
@@ -47,12 +49,15 @@ public class Client extends JFrame implements Runnable
 			din = new DataInputStream( socket.getInputStream() );
 			dout = new DataOutputStream( socket.getOutputStream() );
 			IsConnectedToServer = true;
-			new Thread( this ).start();
+			Thread thread = new Thread( this );
+			thread.start();
 		}catch( IOException ie ){ 		
 			JOptionPane.showMessageDialog(null, "Couldn't connect to the Master Server.");
 			System.exit(0);
 			disconnected = true;
 		}
+		
+		running = true;
 	}
 
 
@@ -71,7 +76,7 @@ public class Client extends JFrame implements Runnable
 
 	public void run() {
 		try {
-			while (true) {
+			while (running) {
 				if(IsConnectedToServer == true){
 					String message = null;
 					try{
@@ -92,5 +97,7 @@ public class Client extends JFrame implements Runnable
 			IsConnectedToServer = false;
 			disconnected = true;
 		}
+		
+		System.out.println("ALIVE");
 	}
 }

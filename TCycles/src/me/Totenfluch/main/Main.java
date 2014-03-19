@@ -57,7 +57,7 @@ public class Main {
 	}
 	
 	public static void disconnectfromserver(){
-		/*try {
+		try {
 			chatframe.din.close();
 			chatframe.dout.close();
 			chatframe.socket.close();	
@@ -67,7 +67,9 @@ public class Main {
 		chatframe.socket = null;
 		chatframe.din = null;
 		chatframe.dout = null;
-		chatframe.dispose();*/
+		chatframe.thread = null;
+		chatframe.running = false;
+		chatframe.dispose();
 		chatframe = null;
 		openMainMenuWindow();
 	}

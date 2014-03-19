@@ -18,7 +18,7 @@ import me.Totenfluch.main.Main;
 public class MainMenuWindow extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private Object[] data = {"Atares", "Dolphy", "EnvyZ", "Bandai", "Connes"};
-	@SuppressWarnings({ "unused", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	private JList serverbrowser;
 	private JButton connect;
 	
