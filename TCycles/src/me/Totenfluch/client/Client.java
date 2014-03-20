@@ -83,7 +83,6 @@ public class Client extends JFrame implements Runnable
 						LatestServerReply = message;
 						GetServerMessages.CheckServerMessages(message);
 						ta.append(message+"\n");
-						System.out.println(message);
 						waitingforreply = false;
 					}catch(Exception e){
 						e.printStackTrace();

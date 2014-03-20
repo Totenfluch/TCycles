@@ -38,8 +38,9 @@ public class GetServerMessages{
 			Main.gameframe.Round = Integer.parseInt(temp[1])+1;
 		}
 		else if(message.startsWith("/forceEndGame")){
-			JOptionPane.showMessageDialog(null, "The Game is over! Thanks for Playing!");
-			System.exit(0);
+			JOptionPane.showMessageDialog(null, "The Game is over! Thanks for Playing!\n Press OK to return to the Main Menu!");
+			Main.disconnectfromserver();
+			Main.openMainMenuWindow();
 		}
 		else if(message.startsWith("/forcestart")){
 			if(Main.AssignedPlayer != -1){

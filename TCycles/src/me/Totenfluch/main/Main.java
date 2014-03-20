@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import me.Totenfluch.other.CheckServerThread_Atares;
+import me.Totenfluch.other.CheckServerThread_Bandai;
+import me.Totenfluch.other.CheckServerThread_Connes;
+import me.Totenfluch.other.CheckServerThread_Dolphy;
+import me.Totenfluch.other.CheckServerThread_EnvyZ;
 import me.Totenfluch.other.OtherStuff;
 import me.Totenfluch.client.Client;
 import me.Totenfluch.frames.LoadingWindow;
@@ -37,6 +42,13 @@ public class Main {
 	public static int TimeToRestart = 3;
 	public static boolean isRespawning = false;
 	public static String LobbyServerName = "TCycle-Server-1-Atares";
+	
+	public static int isServerUpAtares = 0;
+	public static int isServerUpDolphy = 0;
+	public static int isServerUpEnvyZ = 0;
+	public static int isServerUpBandai = 0;
+	public static int isServerUpConnes = 0;
+	
 	public static void main(String[] args){
 
 		try {
@@ -49,6 +61,11 @@ public class Main {
 		ComputerIP = lComputerIP.getHostAddress();
 		lobbyframe = new LobbyWindow();
 		gameframe = new MainGameWindow();
+		CheckServerThread_Atares.CheckServer();
+		CheckServerThread_Dolphy.CheckServer();
+		CheckServerThread_EnvyZ.CheckServer();
+		CheckServerThread_Bandai.CheckServer();
+		CheckServerThread_Connes.CheckServer();
 		MainMenuframe = new MainMenuWindow();
 		initTimers();
 
@@ -88,7 +105,7 @@ public class Main {
 		MainMenuframe.setVisible(true);
 		updateMainMenuWindow.start();
 	}
-
+	
 	public static void ConnectToLobbyServer(String Name){
 		String ip = null;
 		if(Name.equals("Atares")){
