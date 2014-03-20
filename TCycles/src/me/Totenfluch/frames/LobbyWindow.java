@@ -20,10 +20,10 @@ public class LobbyWindow extends JFrame{
 	private JButton Ready;
 
 	public JTextField ID0, ID1, ID2, ID3;
-	public static JTextField User0, User1, User2, User3;
-	public static JButton Join0, Join1, Join2, Join3, back;
+	public JTextField User0, User1, User2, User3;
+	public JButton Join0, Join1, Join2, Join3, back;
 
-	public static boolean[] PlayerReady = new boolean[4];
+	public boolean[] PlayerReady = new boolean[4];
 
 
 	public LobbyWindow(){
@@ -162,6 +162,7 @@ public class LobbyWindow extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == back){
+				Client.processMessage("/disconnect " + Main.SlotTaken + " " + Main.AssignedPlayer);
 				setVisible(false);
 				Main.disconnectfromserver();
 				PlayerReady[0] = false;
@@ -175,17 +176,20 @@ public class LobbyWindow extends JFrame{
 			if(Main.SlotTaken == false){
 				if(e.getSource() == Join0){
 					Client.processMessage("/joinslot " + "0");
+					Main.SlotTaken = true;
 				}
 				if(e.getSource() == Join1){
 					Client.processMessage("/joinslot " + "1");
+					Main.SlotTaken = true;
 				}
 				if(e.getSource() == Join2){
 					Client.processMessage("/joinslot " + "2");
+					Main.SlotTaken = true;
 				}
 				if(e.getSource() == Join3){
 					Client.processMessage("/joinslot " + "3");
+					Main.SlotTaken = true;
 				}
-				Main.SlotTaken = true;
 				Join0.setEnabled(false);
 				Join1.setEnabled(false);
 				Join2.setEnabled(false);

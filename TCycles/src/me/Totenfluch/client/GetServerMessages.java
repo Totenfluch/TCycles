@@ -4,7 +4,6 @@ import javax.swing.JOptionPane;
 
 import me.Totenfluch.frames.MainGameWindow;
 import me.Totenfluch.main.Main;
-import me.Totenfluch.frames.LobbyWindow;;
 
 
 public class GetServerMessages{
@@ -52,29 +51,29 @@ public class GetServerMessages{
 		}
 		else if(message.startsWith("/setReadyPlayers")){
 			if(message.contains("0")){
-				LobbyWindow.PlayerReady[0] = true;
+				Main.lobbyframe.PlayerReady[0] = true;
 			}
 			if(message.contains("1")){
-				LobbyWindow.PlayerReady[1] = true;
+				Main.lobbyframe.PlayerReady[1] = true;
 			}
 			if(message.contains("2")){
-				LobbyWindow.PlayerReady[2] = true;
+				Main.lobbyframe.PlayerReady[2] = true;
 			}
 			if(message.contains("3")){
-				LobbyWindow.PlayerReady[3] = true;
+				Main.lobbyframe.PlayerReady[3] = true;
 			}
 		}
 		else if(message.startsWith("/takeslot")){
 			String temp[] = message.split(" ");
 			Main.AssignedPlayer = Integer.parseInt(temp[1]);
 			if(Integer.parseInt(temp[1]) == 0){
-				LobbyWindow.User0.setText(temp[2]);
+				Main.lobbyframe.User0.setText(temp[2]);
 			}else if(Integer.parseInt(temp[1]) == 1){
-				LobbyWindow.User1.setText(temp[2]);
+				Main.lobbyframe.User1.setText(temp[2]);
 			}else if(Integer.parseInt(temp[1]) == 2){
-				LobbyWindow.User2.setText(temp[2]);
+				Main.lobbyframe.User2.setText(temp[2]);
 			}else if(Integer.parseInt(temp[1]) == 3){
-				LobbyWindow.User3.setText(temp[2]);
+				Main.lobbyframe.User3.setText(temp[2]);
 			}
 		}
 		else if(message.startsWith("/updateSlots")){
@@ -82,51 +81,51 @@ public class GetServerMessages{
 				String temp[] = message.split(" ");
 
 				if(temp[1].equals("true")){
-					LobbyWindow.Join0.setEnabled(false);
+					Main.lobbyframe.Join0.setEnabled(false);
 				}else{
-					LobbyWindow.Join0.setEnabled(true);
+					Main.lobbyframe.Join0.setEnabled(true);
 				}
 
 				if(temp[3].equals("true")){
-					LobbyWindow.Join1.setEnabled(false);
+					Main.lobbyframe.Join1.setEnabled(false);
 				}else{
-					LobbyWindow.Join1.setEnabled(true);
+					Main.lobbyframe.Join1.setEnabled(true);
 				}
 
 				if(temp[5].equals("true")){
-					LobbyWindow.Join2.setEnabled(false);
+					Main.lobbyframe.Join2.setEnabled(false);
 				}else{
-					LobbyWindow.Join2.setEnabled(true);
+					Main.lobbyframe.Join2.setEnabled(true);
 				}
 
 				if(temp[7].equals("true")){
-					LobbyWindow.Join3.setEnabled(false);
+					Main.lobbyframe.Join3.setEnabled(false);
 				}else{
-					LobbyWindow.Join3.setEnabled(true);
+					Main.lobbyframe.Join3.setEnabled(true);
 				}
 
 				if(!temp[2].equals("null")){
-					LobbyWindow.User0.setText(temp[2]);
+					Main.lobbyframe.User0.setText(temp[2]);
 				}else{
-					LobbyWindow.User0.setText("- Empty Slot -");
+					Main.lobbyframe.User0.setText("- Empty Slot -");
 				}
 
 				if(!temp[4].equals("null")){
-					LobbyWindow.User1.setText(temp[4]);
+					Main.lobbyframe.User1.setText(temp[4]);
 				}else{
-					LobbyWindow.User1.setText("- Empty Slot -");
+					Main.lobbyframe.User1.setText("- Empty Slot -");
 				}
 
 				if(!temp[6].equals("null")){
-					LobbyWindow.User2.setText(temp[6]);
+					Main.lobbyframe.User2.setText(temp[6]);
 				}else{
-					LobbyWindow.User2.setText("- Empty Slot -");
+					Main.lobbyframe.User2.setText("- Empty Slot -");
 				}
 
 				if(!temp[8].equals("null")){
-					LobbyWindow.User3.setText(temp[8]);
+					Main.lobbyframe.User3.setText(temp[8]);
 				}else{
-					LobbyWindow.User3.setText("- Empty Slot -");
+					Main.lobbyframe.User3.setText("- Empty Slot -");
 				}
 			}catch(Exception e){
 				e.printStackTrace();

@@ -49,7 +49,7 @@ public class Client extends JFrame implements Runnable
 			din = new DataInputStream( socket.getInputStream() );
 			dout = new DataOutputStream( socket.getOutputStream() );
 			IsConnectedToServer = true;
-			Thread thread = new Thread( this );
+			thread = new Thread( this );
 			thread.start();
 		}catch( IOException ie ){ 		
 			JOptionPane.showMessageDialog(null, "Couldn't connect to the Master Server.");
@@ -62,7 +62,6 @@ public class Client extends JFrame implements Runnable
 
 
 	public static void processMessage( String message ) {
-		if(Main.chatframe.IsConnectedToServer == true){
 			try {
 				Main.chatframe.dout.writeUTF( Main.ComputerName + " " + message );
 				Main.chatframe.tf.setText("");
@@ -71,7 +70,7 @@ public class Client extends JFrame implements Runnable
 				ie.printStackTrace();
 				System.out.println( ie ); 
 			}
-		}
+		
 	}
 
 	public void run() {
@@ -84,6 +83,7 @@ public class Client extends JFrame implements Runnable
 						LatestServerReply = message;
 						GetServerMessages.CheckServerMessages(message);
 						ta.append(message+"\n");
+						System.out.println(message);
 						waitingforreply = false;
 					}catch(Exception e){
 						e.printStackTrace();
@@ -111,6 +111,5 @@ public class Client extends JFrame implements Runnable
 				e.printStackTrace();
 			}
 		}
-		System.out.println("ALIVE");
 	}
 }

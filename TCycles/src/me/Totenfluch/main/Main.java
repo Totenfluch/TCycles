@@ -26,7 +26,7 @@ public class Main {
 	public static Timer updateLobbyWindow = null;
 	public static Timer RespawnTimer = null;
 	public static Timer updateMainMenuWindow = null;
-	public static int Player = 3;
+	public static int Player = -1;
 	public static int AssignedPlayer = -1;
 	public static boolean SlotTaken = false;
 	public static InetAddress lComputerIP;
@@ -71,6 +71,11 @@ public class Main {
 		chatframe.running = false;
 		chatframe.dispose();
 		chatframe = null;
+		lobbyframe = null;
+		AssignedPlayer = -1;
+		Player = -1;
+		SlotTaken = false;
+		lobbyframe = new LobbyWindow();
 		openMainMenuWindow();
 	}
 
