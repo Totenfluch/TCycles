@@ -1,7 +1,5 @@
 package me.Totenfluch.client;
 
-import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
 import me.Totenfluch.frames.MainGameWindow;
@@ -161,11 +159,7 @@ public class GetServerMessages{
 		}
 
 		else if(message.startsWith("ServerIsShuttingDown")){
-			try {
-				Main.chatframe.socket.close();
-			} catch (IOException e){
-				e.printStackTrace();
-			}
+			Main.disconnectfromserver();
 			Main.chatframe.disconnected = true;
 			Main.chatframe.IsConnectedToServer = false;
 		}

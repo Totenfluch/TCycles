@@ -55,7 +55,7 @@ public class Main {
 		lobbyframe = new LobbyWindow();
 
 	}
-	
+
 	public static void disconnectfromserver(){
 		try {
 			chatframe.din.close();
@@ -73,17 +73,17 @@ public class Main {
 		chatframe = null;
 		openMainMenuWindow();
 	}
-	
+
 	public static void closeMainMenuWindow(){
 		MainMenuframe.setVisible(false);
 		updateMainMenuWindow.stop();
 	}
-	
+
 	public static void openMainMenuWindow(){
 		MainMenuframe.setVisible(true);
 		updateMainMenuWindow.start();
 	}
-	
+
 	public static void ConnectToLobbyServer(String Name){
 		String ip = null;
 		if(Name.equals("Atares")){
@@ -91,25 +91,28 @@ public class Main {
 		}else{
 			return;
 		}
-		
-		LoadingWindow lframe = new LoadingWindow();
-		String host = ip;
-		int port = Integer.parseInt("9977");
-		chatframe = new Client(host, port);
-		lframe.setVisible(false);
-		openLobbyWindow();
+		try{
+			LoadingWindow lframe = new LoadingWindow();
+			String host = ip;
+			int port = Integer.parseInt("9977");
+			chatframe = new Client(host, port);
+			lframe.setVisible(false);
+			openLobbyWindow();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public static void openLobbyWindow(){
 		lobbyframe.setVisible(true);
 		updateLobbyWindow.start();
 	}
-	
+
 	public static void closeLobbyWindow(){
 		lobbyframe.setVisible(false);
 		updateLobbyWindow.stop();
 	}
-	
+
 	public static void startgame(){
 		if(isStarted == false){
 			try{
@@ -168,7 +171,7 @@ public class Main {
 				}
 			}
 		});
-		
+
 		updateMainMenuWindow = new Timer(50, new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -176,7 +179,7 @@ public class Main {
 				MainMenuframe.repaint();
 			}
 		});
-		
+
 		RespawnTimer = new Timer(1000, new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)

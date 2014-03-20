@@ -56,7 +56,7 @@ public class Client extends JFrame implements Runnable
 			System.exit(0);
 			disconnected = true;
 		}
-		
+
 		running = true;
 	}
 
@@ -96,8 +96,21 @@ public class Client extends JFrame implements Runnable
 			ie.printStackTrace();
 			IsConnectedToServer = false;
 			disconnected = true;
+		} finally {
+			try{
+				if(dout != null){
+					dout.close();
+				}
+				if(din != null){
+					din.close();
+				}
+				if(socket != null){
+					socket.close();
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
-		
 		System.out.println("ALIVE");
 	}
 }
