@@ -43,11 +43,17 @@ public class Main {
 	public static boolean isRespawning = false;
 	public static String LobbyServerName = "TCycle-Server-1-Atares";
 	
+	public static String ActiveUser = "";
+	
+	public static double Version = 1.0;
+	public static String devState = "Beta";
+	
 	public static int isServerUpAtares = 0;
 	public static int isServerUpDolphy = 0;
 	public static int isServerUpEnvyZ = 0;
 	public static int isServerUpBandai = 0;
 	public static int isServerUpConnes = 0;
+	// 0 -> unchecked, 1 -> up , 2 -> down
 	
 	public static void main(String[] args){
 
@@ -58,6 +64,9 @@ public class Main {
 		}
 		ComputerMac = OtherStuff.getMacAdress();
 		ComputerName = lComputerIP.getHostName();
+		
+		ActiveUser = ComputerName;
+		
 		ComputerIP = lComputerIP.getHostAddress();
 		lobbyframe = new LobbyWindow();
 		gameframe = new MainGameWindow();
@@ -106,23 +115,40 @@ public class Main {
 		updateMainMenuWindow.start();
 	}
 	
-	public static void ConnectToLobbyServer(String Name){
+	public static boolean ConnectToLobbyServer(String Name){
 		String ip = null;
-		if(Name.equals("Atares")){
+		int port = 0;
+		if(Name.equals("Atares") && isServerUpAtares == 1){
 			ip = "188.194.11.106";
+			port = 9977;
+		}else if(Name.equals("Dolphy") && isServerUpDolphy == 1){
+			ip = "188.194.11.106";
+			port = 9976;
+		}else if(Name.equals("EnvyZ") && isServerUpEnvyZ == 1){
+			ip = "188.194.11.106";
+			port = 9975;
+		}else if(Name.equals("Bandai") && isServerUpBandai == 1){
+			ip = "188.194.11.106";
+			port = 9974;
+		}else if(Name.equals("Connes") && isServerUpConnes == 1){
+			ip = "188.194.11.106";
+			port = 9973;
 		}else{
-			return;
+			return false;
 		}
+		
+		
 		try{
 			LoadingWindow lframe = new LoadingWindow();
 			String host = ip;
-			int port = Integer.parseInt("9977");
 			chatframe = new Client(host, port);
 			lframe.setVisible(false);
 			openLobbyWindow();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		return true;
 	}
 
 	public static void openLobbyWindow(){
