@@ -6,7 +6,7 @@ import me.Totenfluch.main.Main;
 
 public class CheckServerThread_Bandai implements Runnable{
 	public void run() {
-		if(hostAvailabilityCheck("188.194.11.106", 9974) == true){
+		if(hostAvailabilityCheck(Main.RootIP, 9974) == true){
 			Main.isServerUpBandai = 1;
 		}else{
 			Main.isServerUpBandai = 2;

@@ -1,15 +1,22 @@
 package me.Totenfluch.frames;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import me.Totenfluch.client.Client;
 import me.Totenfluch.main.Main;
@@ -18,12 +25,20 @@ public class LobbyWindow extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JTextField Server;
 	private JButton Ready;
-
+	
+	private Container Frame;
+	
 	public JTextField ID0, ID1, ID2, ID3;
 	public JTextField User0, User1, User2, User3;
-	public JButton Join0, Join1, Join2, Join3, back;
+	public JButton Join0, Join1, Join2, Join3, back, ChatSend;
+	public JTextPane Chat;
+	public JTextField ChatInput;
+	public JScrollPane ChatScrollPane;
+	
+	public StyledDocument Chatdoc;
 
 	public boolean[] PlayerReady = new boolean[4];
+	public SimpleAttributeSet ChatStyle;
 
 
 	public LobbyWindow(){
@@ -34,13 +49,38 @@ public class LobbyWindow extends JFrame{
 		setContentPane(new DrawPane());
 		setLayout(null);
 
-		Server = new JTextField("TCycle-Server-1 | Atares", 10);
+		
+		Frame = this.getContentPane();
+		
+		Server = new JTextField(Main.LobbyServerName, 10);
 		Server.setFont(new Font("Impact", Font.PLAIN, 20));
 		Server.setBounds(300, 25, 200, 50);
 		Server.setBackground(Color.WHITE);
 		Server.setEditable(false);
 		add(Server);
-
+		
+		Chat = new JTextPane();
+		Chat.setBounds(400, 100, 350, 225);
+		Chat.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		Chat.setEditable(false);
+		
+		ChatScrollPane = new JScrollPane(Chat);
+		ChatScrollPane.setBounds(400, 100, 375, 225);
+		Frame.add(ChatScrollPane);
+		
+		
+		Chatdoc = Chat.getStyledDocument();
+		//add(Chat);
+		
+		ChatInput = new JTextField("");
+		ChatInput.setBounds(400, 335, 290, 25);
+		add(ChatInput);
+		
+		ChatSend = new JButton("Send");
+		ChatSend.setFont(new Font("Serif", Font.PLAIN, 10));
+		ChatSend.setBounds(695, 335, 55, 25);
+		add(ChatSend);
+		
 		ID0 = new JTextField("0");
 		ID0.setBounds(50, 100, 12, 25);
 		ID0.setEditable(false);
@@ -98,10 +138,8 @@ public class LobbyWindow extends JFrame{
 		add(Join3);
 		
 		back = new JButton("Disconnect");
-		back.setBounds(25, 400, 100, 50);
+		back.setBounds(565, 400, 105, 35);
 		add(back);
-
-
 
 		Ready = new JButton("Ready");
 		Ready.setBounds(680, 400, 70, 35);
@@ -114,10 +152,29 @@ public class LobbyWindow extends JFrame{
 		Join2.addActionListener(handler);
 		Join3.addActionListener(handler);
 		back.addActionListener(handler);
+		ChatInput.addActionListener(handler);
+		ChatSend.addActionListener(handler);
 
 
 		setVisible(false);
+		
+		
+		ChatStyle = new SimpleAttributeSet();
+		StyleConstants.setForeground(ChatStyle, Color.BLUE);
+		StyleConstants.setBold(ChatStyle, false);
 	}
+	
+
+	
+	public void AppendToDoc(StyledDocument doc, String s, SimpleAttributeSet Style){
+		try
+		{
+		    doc.insertString(doc.getLength(), s+"\n", Style);
+		    Chat.setCaretPosition(Chat.getDocument().getLength());
+		}
+		catch(Exception e) { System.out.println(e); }
+	}
+	
 
 	class DrawPane extends JPanel{
 		private static final long serialVersionUID = 1L;
@@ -170,30 +227,35 @@ public class LobbyWindow extends JFrame{
 				PlayerReady[2] = false;
 				PlayerReady[3] = false;
 			}
-			if(e.getSource() == Ready){
+			if(e.getSource() == Ready && Main.SlotTaken == true){
 				Client.processMessage("/readyup " + Main.AssignedPlayer);
+			}
+			if(e.getSource() == ChatInput || e.getSource() == ChatSend && !ChatInput.getText().equals(" ") && !ChatInput.getText().equals("")){
+				String s = ChatInput.getText().replace(" ", "_");
+				Client.processMessage("/chat " + Main.ActiveUser + " " + s);
+				ChatInput.setText("");
 			}
 			if(Main.SlotTaken == false){
 				if(e.getSource() == Join0){
 					Client.processMessage("/joinslot " + "0");
 					Main.SlotTaken = true;
+					Join0.setEnabled(false);
 				}
 				if(e.getSource() == Join1){
 					Client.processMessage("/joinslot " + "1");
 					Main.SlotTaken = true;
+					Join1.setEnabled(false);
 				}
 				if(e.getSource() == Join2){
 					Client.processMessage("/joinslot " + "2");
 					Main.SlotTaken = true;
+					Join2.setEnabled(false);
 				}
 				if(e.getSource() == Join3){
 					Client.processMessage("/joinslot " + "3");
 					Main.SlotTaken = true;
+					Join3.setEnabled(false);
 				}
-				Join0.setEnabled(false);
-				Join1.setEnabled(false);
-				Join2.setEnabled(false);
-				Join3.setEnabled(false);
 			}
 
 

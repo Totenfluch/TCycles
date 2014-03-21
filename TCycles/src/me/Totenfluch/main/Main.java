@@ -45,8 +45,10 @@ public class Main {
 	
 	public static String ActiveUser = "";
 	
-	public static double Version = 1.0;
+	public static double Version = 1.1;
 	public static String devState = "Beta";
+	
+	public static String RootIP = "188.194.8.110";
 	
 	public static int isServerUpAtares = 0;
 	public static int isServerUpDolphy = 0;
@@ -119,19 +121,24 @@ public class Main {
 		String ip = null;
 		int port = 0;
 		if(Name.equals("Atares") && isServerUpAtares == 1){
-			ip = "188.194.11.106";
+			LobbyServerName = "TCycle-Server-1-Atares";
+			ip = "188.194.8.110";
 			port = 9977;
 		}else if(Name.equals("Dolphy") && isServerUpDolphy == 1){
-			ip = "188.194.11.106";
+			LobbyServerName = "TCycle-Server-2-Dolphy";
+			ip = "188.194.8.110";
 			port = 9976;
 		}else if(Name.equals("EnvyZ") && isServerUpEnvyZ == 1){
-			ip = "188.194.11.106";
+			LobbyServerName = "TCycle-Server-3-EnvyZ";
+			ip = "188.194.8.110";
 			port = 9975;
 		}else if(Name.equals("Bandai") && isServerUpBandai == 1){
-			ip = "188.194.11.106";
+			LobbyServerName = "TCycle-Server-4-Bandai";
+			ip = "188.194.8.110";
 			port = 9974;
 		}else if(Name.equals("Connes") && isServerUpConnes == 1){
-			ip = "188.194.11.106";
+			LobbyServerName = "TCycle-Server-5-Connes";
+			ip = "188.194.8.110";
 			port = 9973;
 		}else{
 			return false;
@@ -143,6 +150,7 @@ public class Main {
 			String host = ip;
 			chatframe = new Client(host, port);
 			lframe.setVisible(false);
+			Client.processMessage("/joinlobby " + Main.ActiveUser);
 			openLobbyWindow();
 		}catch(Exception e){
 			e.printStackTrace();

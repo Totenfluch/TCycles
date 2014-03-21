@@ -78,7 +78,9 @@ public class OtherStuff {
 		cal.getTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		String time = sdf.format(cal.getTime());
-		String currenttime =  time ;
+		String closebracket = "[";
+		String openbracket = "]";
+		String currenttime = closebracket + time + openbracket ;
 		return currenttime;
 	}
 }

@@ -6,7 +6,7 @@ import me.Totenfluch.main.Main;
 
 public class CheckServerThread_EnvyZ implements Runnable{
 	public void run() {
-		if(hostAvailabilityCheck("188.194.11.106", 9975) == true){
+		if(hostAvailabilityCheck(Main.RootIP, 9975) == true){
 			Main.isServerUpEnvyZ = 1;
 		}else{
 			Main.isServerUpEnvyZ = 2;

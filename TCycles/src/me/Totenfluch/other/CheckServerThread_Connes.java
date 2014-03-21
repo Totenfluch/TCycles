@@ -6,7 +6,7 @@ import me.Totenfluch.main.Main;
 
 public class CheckServerThread_Connes implements Runnable{
 	public void run() {
-		if(hostAvailabilityCheck("188.194.11.106", 9973) == true){
+		if(hostAvailabilityCheck(Main.RootIP, 9973) == true){
 			Main.isServerUpConnes = 1;
 		}else{
 			Main.isServerUpConnes = 2;

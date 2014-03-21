@@ -6,7 +6,7 @@ import me.Totenfluch.main.Main;
 
 public class CheckServerThread_Dolphy implements Runnable{
 	public void run() {
-		if(hostAvailabilityCheck("188.194.11.106", 9976) == true){
+		if(hostAvailabilityCheck(Main.RootIP, 9976) == true){
 			Main.isServerUpDolphy= 1;
 		}else{
 			Main.isServerUpDolphy = 2;

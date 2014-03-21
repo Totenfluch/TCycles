@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 import me.Totenfluch.frames.MainGameWindow;
 import me.Totenfluch.main.Main;
+import me.Totenfluch.other.OtherStuff;
 
 
 public class GetServerMessages{
@@ -27,7 +28,16 @@ public class GetServerMessages{
 			}
 		}
 		
-		if(message.startsWith("/forceRestart")){
+		if(message.startsWith("/addUser")){
+			String temp[] = message.split(" ");
+			Main.lobbyframe.AppendToDoc(Main.lobbyframe.Chatdoc, OtherStuff.TheNormalTime() + " " + temp[1] + " has joined the lobby.", Main.lobbyframe.ChatStyle);
+		} 
+		else if(message.startsWith("/addChat")){
+			String temp[] = message.split(" ");
+			Main.lobbyframe.AppendToDoc(Main.lobbyframe.Chatdoc, OtherStuff.TheNormalTime() + " " + temp[1] + ": " + temp[2].replace("_", " "), Main.lobbyframe.ChatStyle);
+		}
+		
+		else if(message.startsWith("/forceRestart")){
 			if(Main.gameframe.isDeath == false){
 				Main.gameframe.won = true;
 			}

@@ -6,7 +6,7 @@ import me.Totenfluch.main.Main;
 
 public class CheckServerThread_Atares implements Runnable{
 	public void run() {
-		if(hostAvailabilityCheck("188.194.11.106", 9977) == true){
+		if(hostAvailabilityCheck(Main.RootIP, 9977) == true){
 			Main.isServerUpAtares = 1;
 		}else{
 			Main.isServerUpAtares = 2;
