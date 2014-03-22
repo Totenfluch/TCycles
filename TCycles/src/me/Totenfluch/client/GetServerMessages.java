@@ -49,6 +49,7 @@ public class GetServerMessages{
 		}
 		else if(message.startsWith("/forceEndGame")){
 			JOptionPane.showMessageDialog(null, "The Game is over! Thanks for Playing!\n Press OK to return to the Main Menu!");
+			Main.gameframe.setVisible(false);
 			Main.disconnectfromserver();
 			Main.openMainMenuWindow();
 		}
